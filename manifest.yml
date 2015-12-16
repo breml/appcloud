@@ -1,0 +1,7 @@
+---
+applications:
+- name: DemoApp
+  memory: 64M
+  host: demoapp
+  buildpack: https://github.com/cloudfoundry/go-buildpack.git
+  command: appcloud
