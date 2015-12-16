@@ -1,5 +1,30 @@
 {
 	"ImportPath": "github.com/breml/appcloud",
 	"GoVersion": "go1.5.1",
-	"Deps": []
+	"Deps": [
+		{
+			"ImportPath": "github.com/StackExchange/wmi",
+			"Rev": "f3e2bae1e0cb5aef83e319133eabfee30013a4a5"
+		},
+		{
+			"ImportPath": "github.com/go-ole/go-ole",
+			"Comment": "v1.2.0-2-g97ac8b0",
+			"Rev": "97ac8b05c02bbb755d36549e7e607433dfbef4b2"
+		},
+		{
+			"ImportPath": "github.com/shirou/gopsutil/cpu",
+			"Comment": "1.0.0-230-gf58654f",
+			"Rev": "f58654fa1c30aab9b8c503ecea4922e80abcd2bf"
+		},
+		{
+			"ImportPath": "github.com/shirou/gopsutil/internal/common",
+			"Comment": "1.0.0-230-gf58654f",
+			"Rev": "f58654fa1c30aab9b8c503ecea4922e80abcd2bf"
+		},
+		{
+			"ImportPath": "github.com/shirou/gopsutil/mem",
+			"Comment": "1.0.0-230-gf58654f",
+			"Rev": "f58654fa1c30aab9b8c503ecea4922e80abcd2bf"
+		}
+	]
 }
