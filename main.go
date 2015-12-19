@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/breml/appcloud/Godeps/_workspace/src/labix.org/v2/mgo"
-	"github.com/breml/appcloud/Godeps/_workspace/src/labix.org/v2/mgo/bson"
+	"github.com/breml/appcloud/Godeps/_workspace/src/gopkg.in/mgo.v2"
+	"github.com/breml/appcloud/Godeps/_workspace/src/gopkg.in/mgo.v2/bson"
 )
 
 type Temperature struct {

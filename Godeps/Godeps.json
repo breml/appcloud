@@ -3,9 +3,9 @@
 	"GoVersion": "go1.5.2",
 	"Deps": [
 		{
-			"ImportPath": "labix.org/v2/mgo",
-			"Comment": "287",
-			"Rev": "gustavo@niemeyer.net-20140501184651-975yyw9ipld92pji"
+			"ImportPath": "gopkg.in/mgo.v2",
+			"Comment": "r2015.12.06",
+			"Rev": "e30de8ac9ae3b30df7065f766c71f88bba7d4e49"
 		}
 	]
 }
