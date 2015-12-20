@@ -33,16 +33,18 @@ func helloHandler(w http.ResponseWriter, r *http.Request) {
 	c := session.DB(mongodb).C("weatherCOLL")
 
 	var result Temperature
+	curTemp := "undef"
 
 	err = c.Find(nil).One(&result)
 	if err != nil {
 		fmt.Printf("MongoDB find err %v\n", err)
-		return
+	} else {
+		curTemp = result.Temperature
 	}
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "<h1>How is the weather ? </h1>")
-	fmt.Fprintf(w, "Hello world! <br><hr> The weather is "+result.Temperature+" today")
+	fmt.Fprintf(w, "Hello world! <br><hr> The weather is "+curTemp+" today")
 	fmt.Fprintf(w, "<br><hr><form action='/temp'><h3>Change weather</h3><br><input type=text name=temp value=hot><br><input type=submit value='Change the weather...'></form>")
 }
 
@@ -67,12 +69,14 @@ func tempHandler(w http.ResponseWriter, r *http.Request) {
 		err = c.DropCollection()
 		if err != nil {
 			fmt.Printf("MongoDB drop collection err %v\n", err)
-			return
 		}
 
-		c.Insert(Temperature{Temperature: temperature})
-
-		fmt.Fprintf(w, "The weather is now: %s\n", temperature)
+		err = c.Insert(Temperature{Temperature: temperature})
+		if err != nil {
+			fmt.Printf("MongoDB insert err %v\n", err)
+		} else {
+			fmt.Fprintf(w, "The weather is now: %s\n", temperature)
+		}
 		fmt.Fprintf(w, "done <hr> <a href='/'>back</a>")
 	} else {
 		fmt.Fprintf(w, "error: no new temp set <hr> <a href='/'>back</a>")
