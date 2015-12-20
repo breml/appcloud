@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strconv"
 
 	"github.com/breml/appcloud/Godeps/_workspace/src/gopkg.in/mgo.v2"
 	"github.com/breml/appcloud/Godeps/_workspace/src/gopkg.in/mgo.v2/bson"
@@ -20,6 +21,7 @@ type Temperature struct {
 var (
 	mongouri = "mongodb://localhost:27017/weatherDB"
 	mongodb  = "weatherDB"
+	port     = "3000"
 )
 
 func helloHandler(w http.ResponseWriter, r *http.Request) {
@@ -88,6 +90,9 @@ func main() {
 	appEnv, err := cfenv.Current()
 	if err == nil {
 		// In App Cloud
+		port = strconv.Itoa(appEnv.Port)
+
+		// Service
 		mgoService, err := appEnv.Services.WithName("mongodb")
 		if err == nil {
 			var ok bool
@@ -102,11 +107,6 @@ func main() {
 				os.Exit(1)
 			}
 		}
-	}
-
-	port := os.Getenv("PORT")
-	if port == "" {
-		port = "3000"
 	}
 
 	fmt.Printf("Use port: %s\n", port)
