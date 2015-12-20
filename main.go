@@ -8,6 +8,8 @@ import (
 
 	"github.com/breml/appcloud/Godeps/_workspace/src/gopkg.in/mgo.v2"
 	"github.com/breml/appcloud/Godeps/_workspace/src/gopkg.in/mgo.v2/bson"
+
+	"github.com/cloudfoundry-community/go-cfenv"
 )
 
 type Temperature struct {
@@ -15,15 +17,20 @@ type Temperature struct {
 	Temperature string        `bson:"temperature"`
 }
 
+var (
+	mongouri = "mongodb://localhost:27017/weatherDB"
+	mongodb  = "weatherDB"
+)
+
 func helloHandler(w http.ResponseWriter, r *http.Request) {
-	session, err := mgo.Dial("mongodb://localhost:27017/weatherDB")
+	session, err := mgo.Dial(mongouri)
 	if err != nil {
 		fmt.Printf("MongoDB dial err %v\n", err)
 		return
 	}
 	defer session.Close()
 
-	c := session.DB("weatherDB").C("weatherCOLL")
+	c := session.DB(mongodb).C("weatherCOLL")
 
 	var result Temperature
 
@@ -45,17 +52,17 @@ func tempHandler(w http.ResponseWriter, r *http.Request) {
 	queryValues := r.URL.Query()
 
 	if len(queryValues["temp"]) > 0 && queryValues["temp"][0] != "" {
-		re := regexp.MustCompile("[[:^alnum:]]")
+		re := regexp.MustCompile("[^a-zA-Z0-9\\ ]")
 		temperature := re.ReplaceAllString(queryValues["temp"][0], "")
 
-		session, err := mgo.Dial("mongodb://localhost:27017/weatherDB")
+		session, err := mgo.Dial(mongouri)
 		if err != nil {
 			fmt.Printf("MongoDB dial err %v\n", err)
 			return
 		}
 		defer session.Close()
 
-		c := session.DB("weatherDB").C("weatherCOLL")
+		c := session.DB(mongodb).C("weatherCOLL")
 
 		err = c.DropCollection()
 		if err != nil {
@@ -73,6 +80,26 @@ func tempHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// Get MongoDB settings from ENV
+	appEnv, err := cfenv.Current()
+	if err == nil {
+		// In App Cloud
+		mgoService, err := appEnv.Services.WithName("mongodb")
+		if err == nil {
+			var ok bool
+			mongouri, ok = mgoService.Credentials["uri"].(string)
+			if !ok {
+				fmt.Printf("No valid MongoDB uri\n")
+				os.Exit(1)
+			}
+			mongodb, ok = mgoService.Credentials["database"].(string)
+			if !ok {
+				fmt.Printf("No valid MongoDB database\n")
+				os.Exit(1)
+			}
+		}
+	}
+
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "3000"
@@ -82,7 +109,7 @@ func main() {
 
 	http.HandleFunc("/", helloHandler)
 	http.HandleFunc("/temp", tempHandler)
-	err := http.ListenAndServe(":"+port, nil)
+	err = http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		fmt.Printf("ListenAndServe error: %v\n", err)
 		os.Exit(1)
