@@ -89,7 +89,7 @@ func tempHandler(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "The weather is now: %s\n", temperature)
 		}
 	} else {
-		fmt.Fprintf(w, "error: no new temp set <hr> <a href='/'>back</a>")
+		fmt.Fprintf(w, "error: no new temp set")
 	}
 	fmt.Fprintf(w, "<hr> <a href='/'>back</a>")
 }
