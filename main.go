@@ -11,7 +11,7 @@ import (
 	"github.com/breml/appcloud/Godeps/_workspace/src/gopkg.in/mgo.v2"
 	"github.com/breml/appcloud/Godeps/_workspace/src/gopkg.in/mgo.v2/bson"
 
-	"github.com/cloudfoundry-community/go-cfenv"
+	"github.com/breml/appcloud/Godeps/_workspace/src/github.com/cloudfoundry-community/go-cfenv"
 )
 
 const prefixDelim = ": "

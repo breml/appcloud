@@ -2,6 +2,6 @@
 applications:
 - name: DemoApp
   memory: 64M
-  host: demoapp
+  host: tgdbrlu7-elk
   buildpack: https://github.com/cloudfoundry/go-buildpack.git
   command: appcloud
